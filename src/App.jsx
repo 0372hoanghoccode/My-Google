@@ -1,11 +1,11 @@
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import { AppContext } from "./utils/ContextApi";
-import Home from "./components/Home";
-import SearchResult from "./components/SearchResult";
-import Settings from "./components/Settings";
-import ErrorPage from "./components/ErrorPage";
-import VoiceSearch from "./components/VoiceSearch";
-import ImageSearch from "./components/ImageSearch";
+import Home from "./pages/Home";
+import SearchResult from "./pages/SearchResult";
+import Settings from "./pages/Settings";
+import ErrorPage from "./pages/ErrorPage";
+import VoiceSearch from "./pages/VoiceSearch";
+import ImageSearch from "./pages/ImageSearch";
 
 function App() {
   return (
