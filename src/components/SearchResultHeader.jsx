@@ -1,4 +1,4 @@
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom"; 
 import { useContext, useState, useEffect } from "react";
 import { Search, Image, Newspaper, Play, Tag, Settings } from "lucide-react";
 import Logo from "../assets/google-logo.png";
@@ -9,6 +9,7 @@ import { Context } from "../utils/ContextApi";
 const SearchResultHeader = () => {
   const [selectedMenu, setSelectedMenu] = useState("All");
   const { setImageSearch, language } = useContext(Context);
+  const navigate = useNavigate(); 
 
   const getMenuText = (name) => {
     const menuTexts = {
@@ -23,7 +24,7 @@ const SearchResultHeader = () => {
       'vi': {
         'All': 'Tất cả',
         'Images': 'Hình ảnh',
-        'News': 'Tin tức', 
+        'News': 'Tin tức',
         'Videos': 'Video',
         'Shopping': 'Mua sắm',
         'Settings': 'Cài đặt'
@@ -43,7 +44,6 @@ const SearchResultHeader = () => {
   ];
 
   useEffect(() => {
-    // Cleanup: Reset the image search state when component unmounts
     return () => setImageSearch(false);
   }, [setImageSearch]);
 
@@ -51,6 +51,10 @@ const SearchResultHeader = () => {
     const isTypeImage = menuItem.name === "Images";
     setImageSearch(isTypeImage);
     setSelectedMenu(menuItem.name);
+
+    if (menuItem.name === "Settings") {
+      navigate("/settings");
+    }
   };
 
   return (
@@ -64,12 +68,12 @@ const SearchResultHeader = () => {
             <SearchInput />
           </div>
         </div>
-        
+
         <div className="hidden md:block">
           <ProfileIcon />
         </div>
       </div>
-      
+
       <div className="flex justify-start px-4 md:px-8 max-w-7xl mx-auto">
         {menu.map((item, index) => (
           <button

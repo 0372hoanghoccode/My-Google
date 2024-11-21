@@ -47,15 +47,6 @@ const Settings = () => {
           <h1 className="text-2xl font-bold text-gray-800 dark:text-white">
             {language === 'vi' ? 'Cài đặt tìm kiếm' : 'Search Settings'}
           </h1>
-          <div className="flex gap-4">
-            <button
-              onClick={() => navigate('/')}
-              className="flex items-center gap-2 px-4 py-2 bg-blue-500 text-white rounded-lg hover:bg-blue-600 transition-colors"
-            >
-              <Search className="w-4 h-4" />
-              <span>{language === 'vi' ? 'Quay lại' : 'Back'}</span>
-            </button>
-          </div>
         </div>
 
         {/* Settings Card */}

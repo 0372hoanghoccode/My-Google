@@ -28,8 +28,10 @@ const SearchInput = ({ onFocus, onBlur }) => {
   const [searchQuery, setSearchQuery] = useState(query || "");
   const [showDropdown, setShowDropdown] = useState(false);
   const [suggestions, setSuggestions] = useState([]);
+  const [searchHistoryList, setSearchHistoryList] = useState([]);
   const navigate = useNavigate();
   const dropdownRef = useRef(null);
+  
   const { 
     searchHistory, 
     addToHistory, 
@@ -37,6 +39,17 @@ const SearchInput = ({ onFocus, onBlur }) => {
     language 
   } = useContext(Context);
 
+  // Tải lịch sử tìm kiếm từ localStorage
+  const getStoredHistory = () => {
+    try {
+      return JSON.parse(localStorage.getItem('searchHistory') || '[]');
+    } catch (error) {
+      console.error('Lỗi khi đọc lịch sử:', error);
+      return [];
+    }
+  };
+
+  // Xử lý ngoài để đóng dropdown khi click ngoài
   useEffect(() => {
     const handleClickOutside = (event) => {
       if (dropdownRef.current && !dropdownRef.current.contains(event.target)) {
@@ -47,30 +60,38 @@ const SearchInput = ({ onFocus, onBlur }) => {
     return () => document.removeEventListener('mousedown', handleClickOutside);
   }, []);
 
+  // Cập nhật gợi ý và lịch sử
   useEffect(() => {
-    const getStoredHistory = () => {
-      return JSON.parse(localStorage.getItem('searchHistory') || '[]');
-    };
+    if (!searchHistory) {
+      setSuggestions([]);
+      setSearchHistoryList([]);
+      return;
+    }
+
+    const storedHistory = getStoredHistory();
+    setSearchHistoryList(storedHistory);
 
     if (searchQuery) {
-      // Lấy history từ localStorage
-      const storedHistory = getStoredHistory();
-      
+      // Lọc lịch sử và gợi ý thông minh
+      const historyMatches = storedHistory
+        .filter(item => 
+          item.query.toLowerCase().includes(searchQuery.toLowerCase())
+        )
+        .map(item => item.query);
+
       const smartSuggestions = Object.entries(SMART_SUGGESTIONS)
         .filter(([key]) => searchQuery.toLowerCase().includes(key))
         .flatMap(([, values]) => values[language] || values['en']);
 
-      const historyMatches = storedHistory
-        .filter(item => item.query.toLowerCase().includes(searchQuery.toLowerCase()))
-        .map(item => item.query);
-
       const allSuggestions = [...new Set([...historyMatches, ...smartSuggestions])];
       setSuggestions(allSuggestions.slice(0, 8));
     } else {
-      setSuggestions([]);
+      // Hiển thị toàn bộ lịch sử khi không có truy vấn
+      setSuggestions(storedHistory.map(item => item.query).slice(0, 8));
     }
-  }, [searchQuery, language]);
+  }, [searchQuery, language, searchHistory]);
 
+  // Xử lý tìm kiếm
   const handleSearch = (query) => {
     if (!query?.trim()) {
       toast.error(language === 'vi' 
@@ -93,8 +114,10 @@ const SearchInput = ({ onFocus, onBlur }) => {
     }
   };
 
+  // Xóa toàn bộ lịch sử
   const handleClearHistory = () => {
     clearHistory();
+    setSearchHistoryList([]);
     toast.success(language === 'vi' 
       ? 'Đã xóa lịch sử tìm kiếm!' 
       : 'Search history cleared!');
@@ -139,23 +162,52 @@ const SearchInput = ({ onFocus, onBlur }) => {
         </div>
       </div>
 
-      {showDropdown && (suggestions.length > 0) && (
+      {showDropdown && (suggestions.length > 0 || searchHistoryList.length > 0) && (
         <div className="absolute w-full mt-2 bg-white dark:bg-gray-800 rounded-lg shadow-lg border border-gray-200 dark:border-gray-700 z-50">
-          <div className="p-2">
-            <div className="flex items-center justify-between px-3 py-2 text-sm text-gray-500 dark:text-gray-400">
-              <span>{language === 'vi' ? 'Gợi ý' : 'Suggestions'}</span>
+          {/* Phần gợi ý */}
+          {suggestions.length > 0 && (
+            <div className="p-2">
+              <div className="flex items-center justify-between px-3 py-2 text-sm text-gray-500 dark:text-gray-400">
+                <span>{language === 'vi' ? 'Gợi ý' : 'Suggestions'}</span>
+              </div>
+              {suggestions.map((suggestion, index) => (
+                <button
+                  key={index}
+                  onClick={() => handleSearch(suggestion)}
+                  className="flex items-center w-full px-3 py-2 text-left hover:bg-gray-100 dark:hover:bg-gray-700 rounded-md"
+                >
+                  <Search className="w-4 h-4 mr-3 text-gray-400 dark:text-gray-500" />
+                  <span className="text-gray-700 dark:text-gray-300">{suggestion}</span>
+                </button>
+              ))}
             </div>
-            {suggestions.map((suggestion, index) => (
-              <button
-                key={index}
-                onClick={() => handleSearch(suggestion)}
-                className="flex items-center w-full px-3 py-2 text-left hover:bg-gray-100 dark:hover:bg-gray-700 rounded-md"
-              >
-                <Search className="w-4 h-4 mr-3 text-gray-400 dark:text-gray-500" />
-                <span className="text-gray-700 dark:text-gray-300">{suggestion}</span>
-              </button>
-            ))}
-          </div>
+          )}
+
+          {/* Phần lịch sử tìm kiếm */}
+          {searchHistoryList.length > 0 && searchHistory && (
+            <div className="p-2 border-t border-gray-200 dark:border-gray-700">
+              <div className="flex items-center justify-between px-3 py-2 text-sm text-gray-500 dark:text-gray-400">
+                <span>{language === 'vi' ? 'Lịch sử tìm kiếm' : 'Search History'}</span>
+                <button 
+                  onClick={handleClearHistory}
+                  className="text-red-500 hover:text-red-600 flex items-center"
+                >
+                  <Trash2 className="w-4 h-4 mr-1" />
+                  {language === 'vi' ? 'Xóa' : 'Clear'}
+                </button>
+              </div>
+              {searchHistoryList.slice(0, 3).map((item, index) => (
+                <button
+                  key={index}
+                  onClick={() => handleSearch(item.query)}
+                  className="flex items-center w-full px-3 py-2 text-left hover:bg-gray-100 dark:hover:bg-gray-700 rounded-md"
+                >
+                  <History className="w-4 h-4 mr-3 text-gray-400 dark:text-gray-500" />
+                  <span className="text-gray-700 dark:text-gray-300">{item.query}</span>
+                </button>
+              ))}
+            </div>
+          )}
         </div>
       )}
     </div>

@@ -1,13 +1,3 @@
-import { Search, Image, Newspaper, Video, Tag } from "lucide-react"; 
-
-export const menu = [
-    { name: "All", icon: <Search /> }, 
-    { name: "Images", icon: <Image size={14} /> },
-    { name: "News", icon: <Newspaper /> }, 
-    { name: "Videos", icon: <Video /> }, 
-    { name: "Shopping", icon: <Tag size={14} /> }, 
-];
-
 export const quickLinks = [
     "About",
     "Advertising",
