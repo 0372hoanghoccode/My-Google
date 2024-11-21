@@ -1,11 +1,22 @@
-export const quickLinks = [
-    "About",
-    "Advertising",
-    "Business",
-    "How Search works",
-];
+export const quickLinks = {
+    'en': [
+        "About",
+        "Advertising",
+        "Business",
+        "How Search works"
+    ],
+    'vi': [
+        "Giới thiệu",
+        "Quảng cáo",
+        "Kinh doanh",
+        "Cách hoạt động của Tìm kiếm"
+    ]
+};
 
-export const settingMenu = ["Privacy", "Terms", "Settings"];
+export const settingMenu = {
+    'en': ["Privacy", "Terms", "Settings"],
+    'vi': ["Quyền riêng tư", "Điều khoản", "Cài đặt"]
+};
 
 export const pagination = [
     { page: 1, startIndex: 1 },

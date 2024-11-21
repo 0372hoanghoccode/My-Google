@@ -61,7 +61,7 @@ const SearchResultHeader = () => {
      <div className={`sticky top-0 border-b z-50 
        ${theme === 'dark' ? 'bg-gray-900 border-gray-700' : 'bg-white border-gray-200'}
        transition-colors duration-200`}>
-       <div className="flex flex-col md:flex-row items-center justify-between px-4 py-4 md:px-8 max-w-7xl mx-auto">
+       <div className="flex flex-col md:flex-row items-center justify-between py-2 md:px-8 max-w-7xl mx-auto">
          <div className="flex items-center w-full md:w-auto mb-4 md:mb-0">
            <Link to="/" className="mr-8">
              <img 
@@ -82,30 +82,30 @@ const SearchResultHeader = () => {
        </div>
 
        <div className="flex justify-start overflow-x-auto scrollbar-hide px-4 md:px-8 max-w-7xl mx-auto">
-         {menu.map((item, index) => (
-           <button
-             key={index}
-             onClick={() => clickHandler(item)}
-             className={`
-               flex items-center px-4 py-3 border-b-2 
-               flex-shrink-0 transition-colors duration-200 
-               ${selectedMenu === item.name
-                 ? `${theme === 'dark' 
-                     ? 'border-blue-500 text-blue-400' 
-                     : 'border-blue-500 text-blue-500'}`
-                 : `${theme === 'dark'
-                     ? 'border-transparent text-gray-400 hover:text-gray-200'
-                     : 'border-transparent text-gray-600 hover:text-gray-900'}`
-               }
-             `}
-             aria-label={`Switch to ${item.name} search`}
-           >
-             <span className="mr-2">{item.icon}</span>
-             <span className="text-sm font-medium">{getMenuText(item.name)}</span>
-           </button>
-         ))}
-       </div>
-     </div>
+     {menu.map((item, index) => (
+       <button
+         key={index}
+         onClick={() => clickHandler(item)}
+         className={`
+           flex items-center px-4 py-3 border-b-2 
+           flex-shrink-0 transition-colors duration-200 
+           ${selectedMenu === item.name
+             ? `${theme === 'dark' 
+                 ? 'border-blue-500 text-blue-400' 
+                 : 'border-blue-500 text-blue-500'}`
+             : `${theme === 'dark'
+                 ? 'border-transparent text-gray-400 hover:text-gray-200'
+                 : 'border-transparent text-gray-600 hover:text-gray-900'}`
+           }
+         `}
+         aria-label={`Switch to ${item.name} search`}
+       >
+         <span className="mr-2">{item.icon}</span>
+         <span className="text-sm font-medium">{getMenuText(item.name)}</span>
+       </button>
+     ))}
+   </div>
+ </div>
    );
 };
 
