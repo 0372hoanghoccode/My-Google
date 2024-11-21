@@ -8,7 +8,30 @@ import { Context } from "../utils/ContextApi";
 
 const SearchResultHeader = () => {
   const [selectedMenu, setSelectedMenu] = useState("All");
-  const { setImageSearch } = useContext(Context);
+  const { setImageSearch, language } = useContext(Context);
+
+  const getMenuText = (name) => {
+    const menuTexts = {
+      'en': {
+        'All': 'All',
+        'Images': 'Images',
+        'News': 'News',
+        'Videos': 'Videos',
+        'Shopping': 'Shopping',
+        'Settings': 'Settings'
+      },
+      'vi': {
+        'All': 'Tất cả',
+        'Images': 'Hình ảnh',
+        'News': 'Tin tức', 
+        'Videos': 'Video',
+        'Shopping': 'Mua sắm',
+        'Settings': 'Cài đặt'
+      }
+    };
+
+    return menuTexts[language][name] || menuTexts['en'][name];
+  };
 
   const menu = [
     { name: "All", icon: <Search className="w-4 h-4" /> },
@@ -41,12 +64,12 @@ const SearchResultHeader = () => {
             <SearchInput />
           </div>
         </div>
-
+        
         <div className="hidden md:block">
           <ProfileIcon />
         </div>
       </div>
-
+      
       <div className="flex justify-start px-4 md:px-8 max-w-7xl mx-auto">
         {menu.map((item, index) => (
           <button
@@ -59,7 +82,7 @@ const SearchResultHeader = () => {
             }`}
           >
             <span className="mr-2">{item.icon}</span>
-            <span className="text-sm font-medium">{item.name}</span>
+            <span className="text-sm font-medium">{getMenuText(item.name)}</span>
           </button>
         ))}
       </div>

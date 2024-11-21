@@ -57,10 +57,10 @@ const Home = () => {
           </div>
 
           <div className="flex gap-4 mt-8">
-            <button className="p-3 rounded-full hover:bg-gray-100 transition-colors duration-200">
+            <button onClick={() => navigate('/voice-search')}  className="p-3 rounded-full hover:bg-gray-100 transition-colors duration-200">
               <Mic className="w-6 h-6 text-blue-500" />
             </button>
-            <button className="p-3 rounded-full hover:bg-gray-100 transition-colors duration-200">
+            <button onClick={() => navigate('/image-search')} className="p-3 rounded-full hover:bg-gray-100 transition-colors duration-200">
               <Camera className="w-6 h-6 text-green-500" />
             </button>
           </div>
