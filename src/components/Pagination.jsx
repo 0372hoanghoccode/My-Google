@@ -6,13 +6,13 @@ import Logo from "../assets/google-pagination-logo.png";
 import { pagination } from "../utils/Constants";
 
 const Pagination = ({ queries }) => {
-    const { query } = useParams();
-    const [page, setPage] = useState(pagination[0].startIndex);
+    const { query, startIndex } = useParams();
+    const [page, setPage] = useState(Number(startIndex) || pagination[0].startIndex);
     const navigate = useNavigate();
 
     useEffect(() => {
-        setPage(pagination[0].startIndex);
-    }, [query]);
+        setPage(Number(startIndex) || pagination[0].startIndex);
+    }, [query, startIndex]);
 
     const paginationClickHandler = (startIndex) => {
         setPage(startIndex);
@@ -60,8 +60,10 @@ const Pagination = ({ queries }) => {
                         key={p.page}
                         onClick={() => paginationClickHandler(p.startIndex)}
                         className={`cursor-pointer ${
-                            page === p.startIndex ? "text-black" : ""
-                        }`}
+                            page === p.startIndex 
+                              ? "text-black font-bold border-b-2 border-blue-500" 
+                              : "text-[#4285f4]"
+                          }`}
                     >
                         {p.page}
                     </span>

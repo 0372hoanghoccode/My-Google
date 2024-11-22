@@ -1,6 +1,5 @@
 import { createContext, useState, useEffect } from "react";
 
-// Tạo Context để quản lý trạng thái ứng dụng
 export const Context = createContext();
 
 // Component cung cấp Context cho toàn bộ ứng dụng
