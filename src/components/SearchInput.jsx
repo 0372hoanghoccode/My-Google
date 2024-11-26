@@ -1,5 +1,5 @@
 import { useState, useEffect, useRef, useContext } from "react";
-import { Search, X, Mic, Camera, History, Trash2 } from "lucide-react";
+import { Search, X, Mic, Camera, History, SquareX } from "lucide-react";
 import { useNavigate, useParams } from "react-router-dom";
 import { Context } from "../utils/ContextApi";
 import toast from 'react-hot-toast';
@@ -192,7 +192,7 @@ const SearchInput = ({ onFocus, onBlur }) => {
                   onClick={handleClearHistory}
                   className="text-red-500 hover:text-red-600 flex items-center"
                 >
-                  <Trash2 className="w-4 h-4 mr-1" />
+                  <SquareX className="w-4 h-4 mr-1" />
                   {language === 'vi' ? 'Xóa' : 'Clear'}
                 </button>
               </div>

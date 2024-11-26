@@ -1,4 +1,5 @@
 import React, { useContext } from "react";
+import { Link } from "react-router-dom";
 import { quickLinks, settingMenu } from "../utils/Constants";
 import { Context } from "../utils/ContextApi";
 
@@ -39,15 +40,16 @@ const Footer = () => {
                 
                 <div className="flex justify-center">
                     {settingMenu[language].map((menu, index) => (
-                        <span
-                            key={index}
+                        <Link
+                            key={index}  
+                            to={menu === "Settings" ? "/settings" : "#"} 
                             className={`
                                 text-[12px] md:text-[14px] leading-none p-[10px] md:p-[15px]
                                 ${theme === 'dark' ? 'text-gray-400' : 'text-[#70757a]'}
                             `}
                         >
                             {menu}
-                        </span>
+                        </Link>
                     ))}
                 </div>
             </div>
