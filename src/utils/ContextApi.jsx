@@ -2,63 +2,54 @@ import { createContext, useState, useEffect } from "react";
 
 export const Context = createContext();
 
-// Component cung cấp Context cho toàn bộ ứng dụng
 export const AppContext = ({ children }) => {
-  // Trạng thái tìm kiếm hình ảnh
   const [imageSearch, setImageSearch] = useState(false);
 
-  // Khôi phục giao diện từ localStorage hoặc mặc định
   const [theme, setTheme] = useState(() => {
-    const caiDatDaLuu = localStorage.getItem('searchSettings');
-    return caiDatDaLuu 
-      ? JSON.parse(caiDatDaLuu).theme 
+    const savedSettings = localStorage.getItem('appSettings');
+    return savedSettings
+      ? JSON.parse(savedSettings).theme
       : 'light';
   });
 
-  // Cài đặt tìm kiếm an toàn
   const [safeSearch, setSafeSearch] = useState(() => {
-    const caiDatDaLuu = localStorage.getItem('searchSettings');
-    return caiDatDaLuu 
-      ? JSON.parse(caiDatDaLuu).safeSearch 
+    const savedSettings = localStorage.getItem('appSettings');
+    return savedSettings
+      ? JSON.parse(savedSettings).safeSearch
       : 'moderate';
   });
 
-  // Ngôn ngữ ứng dụng
   const [language, setLanguage] = useState(() => {
-    const caiDatDaLuu = localStorage.getItem('searchSettings');
-    return caiDatDaLuu 
-      ? JSON.parse(caiDatDaLuu).language 
+    const savedSettings = localStorage.getItem('appSettings');
+    return savedSettings
+      ? JSON.parse(savedSettings).language
       : (navigator.language.startsWith('vi') ? 'vi' : 'en');
   });
 
-  // Trạng thái thông báo
   const [notifications, setNotifications] = useState(() => {
-    const caiDatDaLuu = localStorage.getItem('searchSettings');
-    return caiDatDaLuu 
-      ? JSON.parse(caiDatDaLuu).notifications 
+    const savedSettings = localStorage.getItem('appSettings');
+    return savedSettings
+      ? JSON.parse(savedSettings).notifications
       : true;
   });
 
-  // Trạng thái lưu lịch sử tìm kiếm
   const [searchHistory, setSearchHistory] = useState(() => {
-    const caiDatDaLuu = localStorage.getItem('searchSettings');
-    return caiDatDaLuu 
-      ? JSON.parse(caiDatDaLuu).searchHistory 
+    const savedSettings = localStorage.getItem('appSettings');
+    return savedSettings
+      ? JSON.parse(savedSettings).searchHistory
       : true;
   });
 
-  // Hiệu ứng lưu cài đặt và áp dụng theme
   useEffect(() => {
-    const caiDat = {
+    const settings = {
       theme,
       safeSearch,
       language,
       notifications,
       searchHistory
     };
-    localStorage.setItem('searchSettings', JSON.stringify(caiDat));
+    localStorage.setItem('appSettings', JSON.stringify(settings));
 
-    // Áp dụng theme dark/light
     if (theme === 'dark') {
       document.documentElement.classList.add('dark');
     } else {
@@ -78,24 +69,23 @@ export const AppContext = ({ children }) => {
     if (!searchHistory || !query?.trim()) return;
 
     try {
-      const lichSuHienTai = JSON.parse(localStorage.getItem('searchHistory') || '[]');
+      const currentHistory = JSON.parse(localStorage.getItem('searchHistory') || '[]');
 
-      const mucMoiNhat = {
+      const newEntry = {
         query: query.trim(),
         timestamp: new Date().toISOString()
       };
 
-      const lichSuKhongTrung = lichSuHienTai.filter(item => item.query !== query.trim());
+      const uniqueHistory = currentHistory.filter(item => item.query !== query.trim());
 
-      // tối đa 5 mục 
-      const lichSuCapNhat = [
-        mucMoiNhat,
-        ...lichSuKhongTrung
+      const updatedHistory = [
+        newEntry,
+        ...uniqueHistory
       ].slice(0, 5);
 
-      localStorage.setItem('searchHistory', JSON.stringify(lichSuCapNhat));
+      localStorage.setItem('searchHistory', JSON.stringify(updatedHistory));
     } catch (error) {
-      console.error('Lỗi khi thêm vào lịch sử:', error);
+      console.error('Error saving to history:', error);
     }
   };
 
@@ -103,7 +93,7 @@ export const AppContext = ({ children }) => {
     try {
       localStorage.removeItem('searchHistory');
     } catch (error) {
-      console.error('Lỗi khi xóa lịch sử:', error);
+      console.error('Error clearing history:', error);
     }
   };
 
@@ -122,7 +112,6 @@ export const AppContext = ({ children }) => {
         setSearchHistory,
         imageSearch,
         setImageSearch,
-
         resetSettings,
         addToHistory,
         clearHistory

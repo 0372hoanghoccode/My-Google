@@ -42,16 +42,13 @@ const Settings = () => {
   return (
     <div className="min-h-screen bg-gray-50 dark:bg-gray-900 transition-colors duration-200">
       <div className="max-w-4xl mx-auto px-4 py-8">
-        {/* Header */}
         <div className="flex items-center justify-between mb-8">
           <h1 className="text-2xl font-bold text-gray-800 dark:text-white">
             {language === 'vi' ? 'Cài đặt tìm kiếm' : 'Search Settings'}
           </h1>
         </div>
 
-        {/* Settings Card */}
         <div className="bg-white dark:bg-gray-800 rounded-xl shadow-lg p-6 space-y-6">
-          {/* Theme Setting */}
           <div className="flex items-center justify-between">
             <div className="flex items-center gap-3">
               {theme === 'light' ? 
@@ -77,7 +74,6 @@ const Settings = () => {
             </select>
           </div>
 
-          {/* Language Setting */}
           <div className="flex items-center justify-between">
             <div className="flex items-center gap-3">
               <Globe className="w-5 h-5 text-green-500" />
@@ -100,7 +96,6 @@ const Settings = () => {
             </select>
           </div>
 
-          {/* SafeSearch Setting */}
           <div className="flex items-center justify-between">
             <div className="flex items-center gap-3">
               <Shield className="w-5 h-5 text-red-500" />
@@ -124,7 +119,6 @@ const Settings = () => {
             </select>
           </div>
 
-          {/* Search History Toggle */}
           <div className="flex items-center justify-between">
             <div className="flex items-center gap-3">
               <History className="w-5 h-5 text-purple-500" />
@@ -156,7 +150,6 @@ const Settings = () => {
             </div>
           </div>
 
-          {/* Notifications Toggle */}
           <div className="flex items-center justify-between">
             <div className="flex items-center gap-3">
               <Bell className="w-5 h-5 text-yellow-500" />
@@ -180,7 +173,6 @@ const Settings = () => {
             </label>
           </div>
 
-          {/* Save Button */}
           <div className="flex justify-end pt-4">
             <button
               onClick={handleSave}
@@ -192,7 +184,6 @@ const Settings = () => {
         </div>
       </div>
 
-      {/* Confirm Dialog */}
       {showConfirm && (
         <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
           <div className="bg-white dark:bg-gray-800 rounded-lg p-6 max-w-sm mx-4">
